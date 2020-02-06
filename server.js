@@ -29,9 +29,26 @@ app.listen(port, () => {
 // Initialize all route with a callback function
 app.use('/all', (req, res) => {
   // Callback function to complete GET '/all'
+  let result;
+  if (projectData.length > 0 ) {
+    result = {
+      data: projectData,
+      message: 'Data sent!'
+    }
+    console.log('Data sent!');
+  } else {
+    result = {
+      data: '',
+      message: 'Project data is empty!'
+    }
+    console.log('Project data is empty!')
+  }
+  res.send(result);
 });
 
 // Post Route
 app.post('/', (req, res) => {
   console.log('Post received');
+  projectData.push(req.body);
+  res.send({info: 'data added with success'});
 });

@@ -1,10 +1,13 @@
 body{
     background: #fffff8;
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
 #app{
     display: grid;
+    width: 100%;
     grid-auto-rows: minmax(150px, auto);
     /* grid-template-columns:  */
     height:100vh;
@@ -17,7 +20,9 @@ body{
 }
 
 .holder{
-
+    display: flex;
+    flex-direction: column;
+    min-width: 80vw;
 }
 
 .entry{
@@ -41,7 +46,7 @@ body{
 }
 
 .headline {
-
+    font-size: larger;
 }
 .title{
 
@@ -67,11 +72,17 @@ input{
 button{
     width: 400px;
     height: 100px;
+    margin-top: 16px;
     background: #3b4a6b;
     color: #f0d43a;
     font-size: 26px;
     font-family: 'Oswald', sans-serif;
     border: none;
+    box-shadow: 1px 2px 8px rgba(68, 68, 68, 0.596);
+    cursor: pointer;
+}
+button:hover, button:focus {
+    background: #425275;
     box-shadow: 2px 4px 5px #444;
 }
 h1{
