@@ -1,3 +1,9 @@
+/* Global Variables */
+
+// Create a new date instance dynamically with JS
+let d = new Date();
+let newDate = d.getMonth()+'.'+ d.getDate()+'.'+ d.getFullYear();
+
 // Personal API Key for OpenWeatherMap API
 const API_KEY = '&appid=5634753f647f1c17fecc7887a9adefe5';
 const BASEURL ='api.openweathermap.org/data/2.5/weather?q=';
