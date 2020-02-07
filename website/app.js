@@ -14,7 +14,79 @@ const entryHolder = getElementById('entryHolder');
 function getElementById(id) {
   return document.getElementById(id);
 }
+/**
+ * 
+ * @param {number} K 
+ * convert Kelvin to F° and C°
+ */
+function convert(K) {
+  return {
+		C: Math.round(K - 273.15),
+		F: Math.round(((K - 273.15) * 9) / 5 + 32)
+	};
+}
 
+
+// Update UI with 3 most recent entries
+const updateUI = (data) => {
+  const recent = data.map(entrie => {
+
+    let element = document.createDocumentFragment();
+    if (entrie.wheather.cod === 200) {
+      const {
+        feelings: feel,
+        time: date,
+        wheather: {
+          main: { temp: temp },
+          name: name,
+          sys: {
+            country: country
+          }
+        }
+      } = entrie;
+      
+      element = `
+      <div class="subentry">
+      <div id = "date">
+      <span class="field">Date: </span>
+      <span>${date}</span>
+      </div> 
+      <div id = "temp">
+      <span class="field">Temperature: </span>
+      <span>${convert(temp).F}F°/ ${convert(temp).C}C°</span>
+      </div>
+      <div id ="content">
+      <span class="field">Feelings: </span>
+      <span>"${feel} in ${name}, ${country}."</span>
+      </div>
+      </div>
+      `;
+    } else {
+      const {
+        feelings: feel,
+        time: date,
+        wheather: {
+          message: msg
+        }
+      } = entrie;
+       element = `
+      <div class="subentry">
+      <div id = "date">
+      <span class="field">Date: </span>
+      <span>${date}</span>
+      </div> 
+      <div>
+      <span class="field__error">Aghh... ${msg}! Try another zipcode.</span>
+      </div>
+      </div>
+      `;
+    }
+    return element;
+  });
+
+  entryHolder.innerHTML = recent.join('');
+
+};
 // Create a new date instance dynamically with JS
 let d = new Date();
 let newDate = d.getMonth() + '.' + d.getDate() + '.' + d.getFullYear();
@@ -32,7 +104,6 @@ const getWheatherData = async (zipcode) => {
 
 /* Function to POST data */
 const postData = async (url = '', data = {}) => {
-  console.log(data);
   const response = await fetch(url, {
     method: 'POST', // *GET, POST, PUT, DELETE, etc.
     credentials: 'same-origin', // include, *same-origin, omit
@@ -44,7 +115,6 @@ const postData = async (url = '', data = {}) => {
 
   try {
     const newData = await response.json();
-    console.log(newData);
     return newData;
   } catch (error) {
     console.log('error', error);
@@ -52,7 +122,7 @@ const postData = async (url = '', data = {}) => {
 };
 
 /* Function to GET Project Data */
-const getData = async () => {
+const getRecentData = async () => {
   const response = await fetch('/all', {
     method: 'GET', // *GET, POST, PUT, DELETE, etc.
     credentials: 'same-origin', // include, *same-origin, omit
@@ -74,22 +144,26 @@ generate.addEventListener('click', () => {
   /* Function called by event listener */
   const data = {
     zip: zip.value,
-    feelings: feelings.value
+    feelings: feelings.value,
+    time: newDate
   };
-  console.log(data);
 
-  if (data.zip.length !== 0 ) {
+  if (data.zip.length !== 0 && data.feelings.length !== 0 ) {
 	  getWheatherData(data.zip)
 	  .then(result => {
-		  console.log(result);
 		  postData('/', {
-			wheather: result,
+      wheather: result,
+      time: data.time,
 			feelings: data.feelings
 		});
-	  }).then(result => {
-		getData().then(data => data);  
+	  }).then(_ => {
+      let recent = getRecentData().then(rr => {
+        const recentEntries = rr.data.slice(-3);
+        updateUI(recentEntries);
+      }); 
+    return recent;
 	  }).catch(err => {
 		  console.log(err);
-	  })
+	  });
   }
 });

@@ -41,7 +41,7 @@ app.use('/all', (req, res) => {
       data: '',
       message: 'Project data is empty!'
     }
-    console.log('Project data is empty!')
+    console.log('Project data is empty!');
   }
   res.send(result);
 });

@@ -37,12 +37,15 @@ body {
 	background: rgba(59, 74, 107, 0.4);
 	grid-area: entry;
 }
-
+.subentry {
+	padding: .3em;
+}
 .feel {
 	grid-area: feel;
 }
 
 #entryHolder {
+	display: flex;
 }
 
 #date {
@@ -52,6 +55,13 @@ body {
 }
 
 #content {
+}
+
+.field {
+	color: #09193c;
+}
+.field__error {
+	color: #b4dce8;
 }
 
 .headline {
