@@ -11,9 +11,17 @@
   <div class ="holder headline">
     Weather Journal App
   </div>
+  <div id="info">
+    
+  </div>
   <div class ="holder zip">
     <label for="zip">Enter Zipcode here</label>
-    <input type="text" id="zip" placeholder="enter zip code here">
+    <div class="input-wrapper">
+      <button id="switch">City name</button>
+      <input type="text" id="zip" placeholder="enter zip code here">
+    </div>
+    <button id="location"> Get location </button>
+    <div id="position"></div>
   </div>
   <div class ="holder feel">
     <label for="feelings">How are you feeling today?</label>
@@ -21,7 +29,15 @@
     <button id="generate" type = "submit"> Generate </button>
   </div>
   <div class ="holder entry">
-    <div class = "title">Most Recent Entry</div>
+    <div class = "title"> 
+      <span> ⭐ Most Recent Entry </span>
+      <select id="entriesCount">
+        <option value="3">3</option>
+        <option value="5">5</option>
+        <option value="all">All</option>
+      </select>
+      <div id="delete">Delete entries</div>
+    </div>
    <div id = "entryHolder">
     <div id = "date"></div> 
    <div id = "temp"></div>
