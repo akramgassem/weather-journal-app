@@ -146,9 +146,7 @@ const infoDialog = (options = {}, cb = () => {}) => {
     info.classList.remove("info__bg");
   }, secs);
 
-  let event = close
-    ? document.querySelector(".close").addEventListener("click", clearTimer)
-    : "";
+  let event = close ? document.querySelector(".close").addEventListener("click", clearTimer) : "";
   cb();
 };
 
@@ -253,9 +251,7 @@ const getWheatherData = async (zip = null, pos = { lat: 0, lon: 0 }) => {
   const zipcode = switchState.toCityquery ? `q=${zip}` : `zip=${zip}`; // switch between cityName or zipcode query api
   const position = `lat=${pos.lat}&lon=${pos.lon}`; // default 0,0
   let query =
-    (zip !== null && Number(pos.lat) === 0) || zip !== null
-      ? zipcode
-      : position;
+    (zip !== null && Number(pos.lat) === 0) || zip !== null ? zipcode : position;
   // switch between pos or zip
   const response = await fetch(BASEURL + query + APIKEY);
   try {
