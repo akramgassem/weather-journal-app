@@ -26,6 +26,13 @@ let switchState = {
 /**
  * Helper functions
  */
+/**
+ * creating random id
+ */
+function ID() {
+  return '_' + Math.random().toString(36).substr(2, 9);
+}
+
 function getElementById(id) {
   return document.getElementById(id);
 }
@@ -74,6 +81,7 @@ const updateUI = data => {
     let element = document.createDocumentFragment();
     if (entrie.wheather.cod === 200) {
       const {
+        id: id,
         feelings: feel,
         time: date,
         wheather: {
@@ -84,7 +92,7 @@ const updateUI = data => {
       } = entrie;
 
       element = `
-      <div class="subentry">
+      <div class="subentry" data-id="${id}">
       <div id = "date">
       <span class="field">📅 Date: </span>
       <span>${date}</span>
@@ -101,12 +109,12 @@ const updateUI = data => {
       `;
     } else {
       const {
-        feelings: feel,
+        id: id,
         time: date,
         wheather: { message: msg }
       } = entrie;
       element = `
-      <div class="subentry">
+      <div class="subentry" data-id="${id}">
       <div id = "date">
       <span class="field">📅 Date: </span>
       <span>${date}</span>
@@ -247,11 +255,11 @@ const getLocation = () => {
 };
 
 /* Function to GET data from openWeather API*/
-const getWheatherData = async (zip = null, pos = { lat: 0, lon: 0 }) => {
-  const zipcode = switchState.toCityquery ? `q=${zip}` : `zip=${zip}`; // switch between cityName or zipcode query api
+const getWheatherData = async (query_ui = null, pos = { lat: 0, lon: 0 }) => {
+  const queryUI = switchState.toCityquery ? `q=${query_ui}` : `zip=${query_ui}`; // switch between cityName or zipcode query api
   const position = `lat=${pos.lat}&lon=${pos.lon}`; // default 0,0
   let query =
-    (zip !== null && Number(pos.lat) === 0) || zip !== null ? zipcode : position;
+    (query_ui !== null && Number(pos.lat) === 0) || query_ui !== null ? queryUI : position;
   // switch between pos or zip
   const response = await fetch(BASEURL + query + APIKEY);
   try {
@@ -312,6 +320,7 @@ const getRecentData = async () => {
 
   try {
     const newData = await response.json();
+    console.log(newData);
     return newData;
   } catch (error) {
     console.log("error", error);
@@ -325,6 +334,8 @@ const performGenerate = async data => {
     .then(result => {
       postData("/", {
         // post object to local server
+        id: ID(),
+        cod: result.cod,
         wheather: result,
         time: data.time,
         feelings: data.feelings
